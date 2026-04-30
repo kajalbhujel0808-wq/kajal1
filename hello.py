@@ -1,3 +1,1 @@
-# kajal1
 print("Hello World")
-
