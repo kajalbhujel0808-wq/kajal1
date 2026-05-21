@@ -1,5 +1,3 @@
-name = input("名前を入力される")
-print(f"{name}さん、こんにちは")
-
-
-
+def greet(name,country):
+     print("Hello", name, "from", country)
+greet("Alisha","Nepal")     
