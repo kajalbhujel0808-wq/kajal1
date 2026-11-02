@@ -1,1501 +1,572 @@
+
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI履歴書作成</title>
 
-
     <style>
-
         * {
             box-sizing: border-box;
         }
 
-
         body {
             margin: 0;
-
-            font-family:
-                Arial,
-                "Noto Sans JP",
-                sans-serif;
-
+            font-family: Arial, "Noto Sans JP", sans-serif;
             background: #f3f6fb;
-
             color: #333;
         }
 
-
-        /* =========================
-           HEADER
-        ========================= */
-
         header {
-            background:
-                linear-gradient(
-                    135deg,
-                    #2563eb,
-                    #7c3aed
-                );
-
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
             color: white;
-
             text-align: center;
-
             padding: 40px 20px;
         }
 
-
         header h1 {
             margin: 0 0 10px;
-
             font-size: 32px;
         }
 
-
-        header p {
-            margin: 0;
-        }
-
-
-        /* =========================
-           MAIN
-        ========================= */
-
         main {
             max-width: 950px;
-
             margin: 35px auto;
-
             padding: 20px;
         }
 
-
-        /* =========================
-           CARD
-        ========================= */
-
         .card {
             background: white;
-
             padding: 30px;
-
             margin-bottom: 25px;
-
             border-radius: 15px;
-
-            box-shadow:
-                0 5px 20px
-                rgba(0, 0, 0, 0.08);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
         }
-
-
-        /* =========================
-           HEADINGS
-        ========================= */
 
         h2 {
             border-left: 5px solid #2563eb;
-
             padding-left: 12px;
-
             margin-top: 30px;
-
             margin-bottom: 20px;
         }
 
-
         h3 {
             margin-top: 30px;
-
-            color: #333;
         }
-
-
-        /* =========================
-           FORM
-        ========================= */
 
         .row {
             display: grid;
-
-            grid-template-columns:
-                1fr 1fr;
-
+            grid-template-columns: 1fr 1fr;
             gap: 20px;
         }
-
 
         .field {
             margin-bottom: 20px;
         }
 
-
         label {
             display: block;
-
             font-weight: bold;
-
             margin-bottom: 8px;
         }
 
-
-        input,
-        textarea,
-        select {
-
+        input, textarea, select {
             width: 100%;
-
             padding: 12px;
-
             border: 1px solid #ccc;
-
             border-radius: 8px;
-
             font-size: 15px;
-
             background: white;
         }
 
-
         textarea {
-
             min-height: 120px;
-
             resize: vertical;
         }
 
-
-        /* =========================
-           BUTTON
-        ========================= */
-
         button {
-
             width: 100%;
-
             padding: 15px;
-
             background: #2563eb;
-
             color: white;
-
             border: none;
-
             border-radius: 8px;
-
             font-size: 17px;
-
             font-weight: bold;
-
             cursor: pointer;
         }
 
-
         button:hover {
-
             background: #1d4ed8;
         }
 
-
-        /* =========================
-           学歴 INPUT
-        ========================= */
-
         .education-box {
-
             border: 1px solid #ddd;
-
             padding: 15px;
-
             border-radius: 10px;
-
             margin-bottom: 15px;
-
             background: #fafafa;
         }
 
-
         .education-title {
-
             font-weight: bold;
-
             margin-bottom: 10px;
-
             color: #2563eb;
         }
 
-
         .education-line {
-
             display: grid;
-
-            grid-template-columns:
-                120px
-                100px
-                1fr
-                100px;
-
+            grid-template-columns: 120px 100px 1fr 100px;
             gap: 10px;
-
             align-items: center;
         }
 
-
-        .education-line select,
-        .education-line input {
-
-            width: 100%;
-
-            padding: 12px;
-
-            border: 1px solid #ccc;
-
-            border-radius: 7px;
-
-            font-size: 15px;
-        }
-
-
-        /* =========================
-           履歴書 PREVIEW
-        ========================= */
-
         .preview {
-
             background: white;
-
             border: 1px solid #333;
-
             padding: 30px;
         }
 
-
         .preview-title {
-
             text-align: center;
-
             font-size: 32px;
-
             font-weight: bold;
-
             letter-spacing: 12px;
-
             margin-bottom: 30px;
         }
 
+        /* PERSONAL INFORMATION + PHOTO */
+
+        .preview-header {
+            display: grid;
+            grid-template-columns: 1fr 150px;
+            gap: 15px;
+            align-items: start;
+        }
+
+        .personal-details {
+            min-width: 0;
+        }
+
+        .photo-section {
+            width: 150px;
+            text-align: center;
+        }
+
+        .photo-box {
+            width: 150px;
+            height: 200px;
+            border: 1px solid #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #888;
+            background: white;
+            overflow: hidden;
+        }
+
+        .photo-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-upload {
+            margin-top: 10px;
+        }
+
+        .photo-upload input {
+            font-size: 12px;
+            padding: 5px;
+        }
 
         .preview-row {
-
             display: grid;
-
-            grid-template-columns:
-                150px 1fr;
-
+            grid-template-columns: 120px 1fr;
             border: 1px solid #333;
-
             min-height: 50px;
         }
 
-
         .preview-label {
-
             padding: 12px;
-
             background: #eee;
-
             border-right: 1px solid #333;
-
             font-weight: bold;
         }
 
-
         .preview-value {
-
             padding: 12px;
-
             white-space: pre-line;
+            overflow-wrap: anywhere;
         }
 
-
-        /* =========================
-           🎓 学歴 PREVIEW
-        ========================= */
-
         .education-preview {
-
             width: 100%;
-
             border-collapse: collapse;
-
             table-layout: fixed;
-
             margin-bottom: 20px;
         }
 
-
-        .education-preview tr {
-
-            height: 52px;
-        }
-
-
         .education-preview td {
-
             border: 1px solid #333;
-
             padding: 12px;
-
-            vertical-align: middle;
-
             background: white;
         }
 
-
-        /* 年月 */
-
         .education-date {
-
             width: 160px;
-
-            white-space: nowrap;
-
             text-align: center;
         }
-
-
-        /* 学校名 */
-
-        .education-school {
-
-            width: auto;
-
-            white-space: nowrap;
-        }
-
-
-        /* 入学・卒業 */
 
         .education-type {
-
             width: 100px;
-
             text-align: center;
-
-            white-space: nowrap;
         }
 
-
-        /* =========================
-           AI BOX
-        ========================= */
-
         .ai-box {
-
             margin-top: 20px;
-
             padding: 20px;
-
             background: #eef6ff;
-
-            border-left:
-                5px solid #2563eb;
-
+            border-left: 5px solid #2563eb;
             border-radius: 8px;
         }
 
-
-        /* =========================
-           PRINT BUTTON
-        ========================= */
-
         .print-button {
-
             margin-top: 20px;
-
             background: #16a34a;
         }
 
-
         .print-button:hover {
-
             background: #15803d;
         }
 
-
-        /* =========================
-           MOBILE
-        ========================= */
-
         @media (max-width: 700px) {
-
-
             .row {
-
-                grid-template-columns:
-                    1fr;
+                grid-template-columns: 1fr;
             }
-
 
             .education-line {
-
-                grid-template-columns:
-                    1fr 1fr;
+                grid-template-columns: 1fr 1fr;
             }
-
 
             .education-line input {
-
-                grid-column:
-                    span 2;
+                grid-column: span 2;
             }
 
-
-            .education-preview {
-
-                font-size: 13px;
+            .preview-header {
+                grid-template-columns: 1fr 100px;
+                gap: 8px;
             }
 
-
-            .education-date {
-
-                width: 105px;
+            .photo-section {
+                width: 100px;
             }
 
-
-            .education-type {
-
-                width: 70px;
+            .photo-box {
+                width: 100px;
+                height: 140px;
             }
 
+            .preview {
+                padding: 12px;
+            }
 
             .preview-row {
-
-                grid-template-columns:
-                    100px 1fr;
+                grid-template-columns: 90px 1fr;
             }
 
-
             .preview-title {
-
                 font-size: 25px;
             }
 
-        }
-
-       /* =========================
-   履歴書 PHOTO BOX
-========================= */
-
-.preview-header {
-    display: grid;
-    grid-template-columns: 1fr 150px;
-    gap: 15px;
-    align-items: start;
-}
-
-.photo-box {
-    width: 150px;
-    height: 200px;
-    border: 1px solid #333;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    background: #fff;
-    overflow: hidden;
-    position: relative;
-}
-
-.photo-box img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.photo-upload {
-    margin-top: 10px;
-}
-
-.photo-upload input {
-    font-size: 12px;
-    padding: 5px;
-}
-
-@media print {
-    .photo-upload {
-        display: none;
-    }
-
-    .photo-box {
-        width: 150px;
-        height: 200px;
-    }
-}
-
-@media (max-width: 700px) {
-    .preview-header {
-        grid-template-columns: 1fr 110px;
-    }
-
-    .photo-box {
-        width: 110px;
-        height: 150px;
-    }
-}
-        /* =========================
-           PRINT
-     
-</div>
-
-<script>
-function previewPhoto(event) {
-    const file = event.target.files[0];
-
-    if (!file) return;
-
-    if (!file.type.startsWith("image/")) {
-        alert("画像ファイルを選択してください。");
-        return;
-    }
-
-    const reader = new FileReader();
-
-    reader.onload = function(e) {
-        const box = document.getElementById("photoBox");
-        box.innerHTML = "";
-
-        const img = document.createElement("img");
-        img.src = e.target.result;
-        img.alt = "履歴書の写真";
-
-        box.appendChild(img);
-    };
-
-    reader.readAsDataURL(file);
-}
-</script>
-        
-
-        @media print {
-
-
-            header,
-            .form-card,
-            .print-button {
-
-                display: none;
+            .education-preview {
+                font-size: 12px;
             }
 
+            .education-date {
+                width: 100px;
+            }
+
+            .education-type {
+                width: 65px;
+            }
+        }
+
+        @media print {
+            header,
+            .form-card,
+            .print-button,
+            .photo-upload {
+                display: none !important;
+            }
 
             body {
-
                 background: white;
             }
 
-
             main {
-
                 margin: 0;
-
                 max-width: none;
+                padding: 0;
             }
-
 
             .card {
-
                 box-shadow: none;
+                border-radius: 0;
             }
-
         }
-
     </style>
-
 </head>
-
 
 <body>
 
-
-<!-- =========================
-     HEADER
-========================= -->
-
 <header>
-
-    <h1>
-        🤖 AI履歴書作成
-    </h1>
-
-    <p>
-        正しい日本語の履歴書を簡単に作成できます
-    </p>
-
+    <h1>🤖 AI履歴書作成</h1>
+    <p>正しい日本語の履歴書を簡単に作成できます</p>
 </header>
-
 
 <main>
 
-
-<!-- =========================
-     FORM
-========================= -->
-
 <div class="card form-card">
 
+<form method="POST" enctype="multipart/form-data">
 
-<form method="POST">
+    <h2>👤 基本情報</h2>
 
+    <div class="row">
+        <div class="field">
+            <label>ふりがな</label>
+            <input type="text" name="furigana"
+                   value="{{ resume.furigana if resume else '' }}"
+                   placeholder="かじゃる ぶじぇる">
+        </div>
 
-<!-- =========================
-     基本情報
-========================= -->
+        <div class="field">
+            <label>氏名</label>
+            <input type="text" name="name"
+                   value="{{ resume.name if resume else '' }}"
+                   placeholder="Kajal Bhujel">
+        </div>
+    </div>
 
-<h2>
-    👤 基本情報
-</h2>
+    <div class="row">
+        <div class="field">
+            <label>生年月日</label>
+            <input type="date" name="birthday"
+                   value="{{ resume.birthday if resume else '' }}">
+        </div>
 
-
-<div class="row">
-
+        <div class="field">
+            <label>電話番号</label>
+            <input type="tel" name="phone"
+                   value="{{ resume.phone if resume else '' }}"
+                   placeholder="090-1234-5678">
+        </div>
+    </div>
 
     <div class="field">
-
-        <label>
-            ふりがな
-        </label>
-
-        <input
-            type="text"
-            name="furigana"
-            placeholder="かじゃる ぶじぇる"
-        >
-
+        <label>住所</label>
+        <input type="text" name="address"
+               value="{{ resume.address if resume else '' }}"
+               placeholder="熊本県...">
     </div>
-
 
     <div class="field">
-
-        <label>
-            氏名
-        </label>
-
-        <input
-            type="text"
-            name="name"
-            placeholder="Kajal Bhujel"
-        >
-
+        <label>メールアドレス</label>
+        <input type="email" name="email"
+               value="{{ resume.email if resume else '' }}"
+               placeholder="example@email.com">
     </div>
 
+    <h2>🎓 学歴</h2>
 
-</div>
+    {% for i in range(1, 4) %}
+    <div class="education-box">
+        <div class="education-title">学歴 {{ i }}</div>
 
+        <div class="education-line">
+            <select name="education{{ i }}_year">
+                <option value="">年</option>
+                {% for year in range(2000, 2031) %}
+                <option value="{{ year }}"
+                    {% if resume and resume['education' ~ i ~ '_year'] == year|string %}selected{% endif %}>
+                    {{ year }}年
+                </option>
+                {% endfor %}
+            </select>
 
-<div class="row">
+            <select name="education{{ i }}_month">
+                <option value="">月</option>
+                {% for month in range(1, 13) %}
+                <option value="{{ month }}"
+                    {% if resume and resume['education' ~ i ~ '_month'] == month|string %}selected{% endif %}>
+                    {{ month }}月
+                </option>
+                {% endfor %}
+            </select>
 
+            <input type="text"
+                   name="education{{ i }}_school"
+                   value="{{ resume['education' ~ i ~ '_school'] if resume else '' }}"
+                   placeholder="学校名">
 
+            <select name="education{{ i }}_type">
+                <option value="入学">入学</option>
+                <option value="卒業"
+                    {% if resume and resume['education' ~ i ~ '_type'] == '卒業' %}selected{% endif %}>
+                    卒業
+                </option>
+            </select>
+        </div>
+    </div>
+    {% endfor %}
+
+    <h2>💼 職歴</h2>
     <div class="field">
-
-        <label>
-            生年月日
-        </label>
-
-        <input
-            type="date"
-            name="birthday"
-        >
-
+        <textarea name="work"
+                  placeholder="職歴を入力してください">{{ resume.work if resume else '' }}</textarea>
     </div>
 
-
+    <h2>🏆 資格・免許</h2>
     <div class="field">
-
-        <label>
-            電話番号
-        </label>
-
-        <input
-            type="tel"
-            name="phone"
-            placeholder="090-1234-5678"
-        >
-
+        <textarea name="qualification"
+                  placeholder="資格・免許を入力してください">{{ resume.qualification if resume else '' }}</textarea>
     </div>
 
-
-</div>
-
-
-<div class="field">
-
-    <label>
-        住所
-    </label>
-
-    <input
-        type="text"
-        name="address"
-        placeholder="熊本県..."
-    >
-
-</div>
-
-
-<div class="field">
-
-    <label>
-        メールアドレス
-    </label>
-
-    <input
-        type="email"
-        name="email"
-        placeholder="example@email.com"
-    >
-
-</div>
-
-
-<!-- =========================
-     学歴
-========================= -->
-
-<h2>
-    🎓 学歴
-</h2>
-
-
-<!-- 学歴① -->
-
-<div class="education-box">
-
-
-    <div class="education-title">
-        学歴 ①
+    <h2>✨ 自己PR</h2>
+    <div class="field">
+        <textarea name="self_pr"
+                  placeholder="自己PRを入力してください">{{ resume.self_pr if resume else '' }}</textarea>
     </div>
 
-
-    <div class="education-line">
-
-
-        <select
-            name="education1_year"
-        >
-
-            <option value="">
-                年
-            </option>
-
-
-            {% for year in range(2000, 2031) %}
-
-            <option value="{{ year }}">
-                {{ year }}年
-            </option>
-
-            {% endfor %}
-
-        </select>
-
-
-        <select
-            name="education1_month"
-        >
-
-            <option value="">
-                月
-            </option>
-
-
-            {% for month in range(1, 13) %}
-
-            <option value="{{ month }}">
-                {{ month }}月
-            </option>
-
-            {% endfor %}
-
-        </select>
-
-
-        <input
-            type="text"
-            name="education1_school"
-            placeholder="学校名"
-        >
-
-
-        <select
-            name="education1_type"
-        >
-
-            <option value="入学">
-                入学
-            </option>
-
-            <option value="卒業">
-                卒業
-            </option>
-
-        </select>
-
-
+    <h2>🎯 志望動機</h2>
+    <div class="field">
+        <textarea name="motivation"
+                  placeholder="志望動機を入力してください">{{ resume.motivation if resume else '' }}</textarea>
     </div>
 
-</div>
-
-
-<!-- 学歴② -->
-
-<div class="education-box">
-
-
-    <div class="education-title">
-        学歴 ②
+    <h2>📌 本人希望欄</h2>
+    <div class="field">
+        <textarea name="hope"
+                  placeholder="希望を入力してください">{{ resume.hope if resume else '' }}</textarea>
     </div>
 
-
-    <div class="education-line">
-
-
-        <select
-            name="education2_year"
-        >
-
-            <option value="">
-                年
-            </option>
-
-
-            {% for year in range(2000, 2031) %}
-
-            <option value="{{ year }}">
-                {{ year }}年
-            </option>
-
-            {% endfor %}
-
-        </select>
-
-
-        <select
-            name="education2_month"
-        >
-
-            <option value="">
-                月
-            </option>
-
-
-            {% for month in range(1, 13) %}
-
-            <option value="{{ month }}">
-                {{ month }}月
-            </option>
-
-            {% endfor %}
-
-        </select>
-
-
-        <input
-            type="text"
-            name="education2_school"
-            placeholder="学校名"
-        >
-
-
-        <select
-            name="education2_type"
-        >
-
-            <option value="入学">
-                入学
-            </option>
-
-            <option value="卒業">
-                卒業
-            </option>
-
-        </select>
-
-
+    <h2>📷 写真</h2>
+    <div class="field">
+        <label>写真を選択してください</label>
+        <input type="file" name="photo"
+               accept=".jpg,.jpeg,.png,.webp">
     </div>
 
-</div>
-
-
-<!-- 学歴③ -->
-
-<div class="education-box">
-
-
-    <div class="education-title">
-        学歴 ③
-    </div>
-
-
-    <div class="education-line">
-
-
-        <select
-            name="education3_year"
-        >
-
-            <option value="">
-                年
-            </option>
-
-
-            {% for year in range(2000, 2031) %}
-
-            <option value="{{ year }}">
-                {{ year }}年
-            </option>
-
-            {% endfor %}
-
-        </select>
-
-
-        <select
-            name="education3_month"
-        >
-
-            <option value="">
-                月
-            </option>
-
-
-            {% for month in range(1, 13) %}
-
-            <option value="{{ month }}">
-                {{ month }}月
-            </option>
-
-            {% endfor %}
-
-        </select>
-
-
-        <input
-            type="text"
-            name="education3_school"
-            placeholder="学校名"
-        >
-
-
-        <select
-            name="education3_type"
-        >
-
-            <option value="入学">
-                入学
-            </option>
-
-            <option value="卒業">
-                卒業
-            </option>
-
-        </select>
-
-
-    </div>
-
-</div>
-
-
-<!-- =========================
-     職歴
-========================= -->
-
-<h2>
-    💼 職歴
-</h2>
-
-
-<div class="field">
-
-    <textarea
-        name="work"
-        placeholder="例：
-2024年4月　〇〇株式会社 入社
-2025年3月　一身上の都合により退職"
-    ></textarea>
-
-</div>
-
-
-<!-- =========================
-     資格
-========================= -->
-
-<h2>
-    🏆 資格・免許
-</h2>
-
-
-<div class="field">
-
-    <textarea
-        name="qualification"
-        placeholder="例：
-日本語能力試験 N2
-普通自動車第一種運転免許"
-    ></textarea>
-
-</div>
-
-
-<!-- =========================
-     自己PR
-========================= -->
-
-<h2>
-    ✨ 自己PR
-</h2>
-
-
-<div class="field">
-
-    <textarea
-        name="self_pr"
-        placeholder="今まで頑張ったこと、長所、経験などを書いてください。"
-    ></textarea>
-
-</div>
-
-
-<!-- =========================
-     志望動機
-========================= -->
-
-<h2>
-    🎯 志望動機
-</h2>
-
-
-<div class="field">
-
-    <textarea
-        name="motivation"
-        placeholder="この会社・仕事を選んだ理由を書いてください。"
-    ></textarea>
-
-</div>
-
-
-<!-- =========================
-     本人希望
-========================= -->
-
-<h2>
-    📌 本人希望欄
-</h2>
-
-
-<div class="field">
-
-    <textarea
-        name="hope"
-        placeholder="勤務時間、勤務地など希望があれば入力してください。"
-    ></textarea>
-
-</div>
-
-
-<!-- =========================
-     SUBMIT
-========================= -->
-
-<button type="submit">
-
-    📄 履歴書を作成する
-
-</button>
-
+    <button type="submit">📄 履歴書を作成する</button>
 
 </form>
-
 </div>
-
-
-<!-- =========================
-     RESULT
-========================= -->
 
 {% if resume %}
 
-
 <div class="card">
-
-
 <div class="preview">
 
+    <div class="preview-title">履歴書</div>
 
-<div class="preview-title">
-    履歴書
-</div>
+    <!-- PHOTO ON RIGHT SIDE -->
 
+    <div class="preview-header">
 
-<!-- 氏名 -->
+        <div class="personal-details">
 
-<div class="preview-row">
+            {% for label, key in [
+                ('ふりがな', 'furigana'),
+                ('氏名', 'name'),
+                ('生年月日', 'birthday'),
+                ('住所', 'address'),
+                ('電話番号', 'phone'),
+                ('メール', 'email')
+            ] %}
 
-    <div class="preview-label">
-        氏名
+            <div class="preview-row">
+                <div class="preview-label">{{ label }}</div>
+                <div class="preview-value">{{ resume[key] }}</div>
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        <div class="photo-section">
+
+            <div class="photo-box">
+
+                {% if resume.photo %}
+                <img src="{{ url_for('static', filename=resume.photo) }}"
+                     alt="履歴書写真">
+                {% else %}
+                写真を貼る位置
+                <br>
+                Photo Here
+                {% endif %}
+
+            </div>
+
+        </div>
+
     </div>
 
-    <div class="preview-value">
-        {{ resume.name }}
+    <h3>🎓 学歴</h3>
+
+    <table class="education-preview">
+        {% for i in range(1, 4) %}
+            {% if resume['education' ~ i ~ '_school'] %}
+            <tr>
+                <td class="education-date">
+                    {{ resume['education' ~ i ~ '_year'] }}年
+                    {{ resume['education' ~ i ~ '_month'] }}月
+                </td>
+                <td>{{ resume['education' ~ i ~ '_school'] }}</td>
+                <td class="education-type">
+                    {{ resume['education' ~ i ~ '_type'] }}
+                </td>
+            </tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+
+    {% for label, key in [
+        ('💼 職歴', 'work'),
+        ('🏆 資格・免許', 'qualification'),
+        ('✨ 自己PR', 'self_pr'),
+        ('🎯 志望動機', 'motivation'),
+        ('📌 本人希望欄', 'hope')
+    ] %}
+
+    <h3>{{ label }}</h3>
+    <div class="preview-row">
+        <div class="preview-label">{{ label }}</div>
+        <div class="preview-value">{{ resume[key] }}</div>
     </div>
 
-</div>
-
-
-<!-- ふりがな -->
-
-<div class="preview-row">
-
-    <div class="preview-label">
-        ふりがな
-    </div>
-
-    <div class="preview-value">
-        {{ resume.furigana }}
-    </div>
-
-</div>
-
-
-<!-- 生年月日 -->
-
-<div class="preview-row">
-
-    <div class="preview-label">
-        生年月日
-    </div>
-
-    <div class="preview-value">
-        {{ resume.birthday }}
-    </div>
-
-</div>
-
-
-<!-- 住所 -->
-
-<div class="preview-row">
-
-    <div class="preview-label">
-        住所
-    </div>
-
-    <div class="preview-value">
-        {{ resume.address }}
-    </div>
-
-</div>
-
-
-<!-- 電話番号 -->
-
-<div class="preview-row">
-
-    <div class="preview-label">
-        電話番号
-    </div>
-
-    <div class="preview-value">
-        {{ resume.phone }}
-    </div>
-
-</div>
-
-
-<!-- メール -->
-
-<div class="preview-row">
-
-    <div class="preview-label">
-        メール
-    </div>
-
-    <div class="preview-value">
-        {{ resume.email }}
-    </div>
+    {% endfor %}
 
 </div>
-
-
-<!-- =========================
-     🎓 学歴 RESULT
-========================= -->
-
-<h3>
-    🎓 学歴
-</h3>
-
-
-<table class="education-preview">
-
-
-    {% if resume.education1_school %}
-
-    <tr>
-
-        <td class="education-date">
-
-            {{ resume.education1_year }}年{{ resume.education1_month }}月
-
-        </td>
-
-
-        <td class="education-school">
-
-            {{ resume.education1_school }}
-
-        </td>
-
-
-        <td class="education-type">
-
-            {{ resume.education1_type }}
-
-        </td>
-
-    </tr>
-
-    {% endif %}
-
-
-
-    {% if resume.education2_school %}
-
-    <tr>
-
-        <td class="education-date">
-
-            {{ resume.education2_year }}年{{ resume.education2_month }}月
-
-        </td>
-
-
-        <td class="education-school">
-
-            {{ resume.education2_school }}
-
-        </td>
-
-
-        <td class="education-type">
-
-            {{ resume.education2_type }}
-
-        </td>
-
-    </tr>
-
-    {% endif %}
-
-
-
-    {% if resume.education3_school %}
-
-    <tr>
-
-        <td class="education-date">
-
-            {{ resume.education3_year }}年{{ resume.education3_month }}月
-
-        </td>
-
-
-        <td class="education-school">
-
-            {{ resume.education3_school }}
-
-        </td>
-
-
-        <td class="education-type">
-
-            {{ resume.education3_type }}
-
-        </td>
-
-    </tr>
-
-    {% endif %}
-
-
-</table>
-
-
-<!-- =========================
-     職歴 RESULT
-========================= -->
-
-<h3>
-    💼 職歴
-</h3>
-
-
-<div class="preview-row">
-
-    <div class="preview-label">
-        職歴
-    </div>
-
-    <div class="preview-value">
-        {{ resume.work }}
-    </div>
-
-</div>
-
-
-<!-- =========================
-     資格 RESULT
-========================= -->
-
-<h3>
-    🏆 資格・免許
-</h3>
-
-
-<div class="preview-row">
-
-    <div class="preview-label">
-        資格
-    </div>
-
-    <div class="preview-value">
-        {{ resume.qualification }}
-    </div>
-
-</div>
-
-
-<!-- =========================
-     自己PR RESULT
-========================= -->
-
-<h3>
-    ✨ 自己PR
-</h3>
-
-
-<div class="preview-row">
-
-    <div class="preview-label">
-        自己PR
-    </div>
-
-    <div class="preview-value">
-        {{ resume.self_pr }}
-    </div>
-
-</div>
-
-
-<!-- =========================
-     志望動機 RESULT
-========================= -->
-
-<h3>
-    🎯 志望動機
-</h3>
-
-
-<div class="preview-row">
-
-    <div class="preview-label">
-        志望動機
-    </div>
-
-    <div class="preview-value">
-        {{ resume.motivation }}
-    </div>
-
-</div>
-
-
-<!-- =========================
-     本人希望 RESULT
-========================= -->
-
-<h3>
-    📌 本人希望欄
-</h3>
-
-
-<div class="preview-row">
-
-    <div class="preview-label">
-        希望
-    </div>
-
-    <div class="preview-value">
-        {{ resume.hope }}
-    </div>
-
-</div>
-
-
-</div>
-
-
-<!-- =========================
-     AI CHECK
-========================= -->
 
 <div class="ai-box">
-
-    <h3>
-        🤖 AIチェック
-    </h3>
-
-    <p>
-        現在はデモ版です。
-    </p>
-
-    <p>
-        次の段階で、誤字・脱字・文法・敬語・表現を
-        AIで自動修正できるようにできます。
-    </p>
-
+    <h3>🤖 AIチェック</h3>
+    <p>現在はデモ版です。</p>
+    <p>次の段階で、誤字・脱字・文法・敬語・表現をAIで自動修正できるようにできます。</p>
 </div>
 
-
-<!-- =========================
-     PRINT
-========================= -->
-
-<button
-    class="print-button"
-    onclick="window.print()">
-
+<button class="print-button" onclick="window.print()">
     🖨️ PDF保存 / 印刷
-
 </button>
 
-
 </div>
-
 
 {% endif %}
 
-
 </main>
 
-
 </body>
-
 </html>
